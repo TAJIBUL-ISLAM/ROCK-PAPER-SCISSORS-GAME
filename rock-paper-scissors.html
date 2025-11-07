@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rock Paper Scissors</title>
+  <style>
+    body {
+      background-color: rgba(9, 4, 4, 0.879);
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .move-button {
+      
+      background-color: rgba(38, 113, 187, 0.366);
+      border: 2px solid white;
+      border-radius: 50px;
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      font-size: 90px;
+      cursor: pointer;
+    }
+    .result, .score {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+    .reset-button {
+      background-color: rgb(35, 161, 26);
+      margin-top: 20px;
+      padding: 20px 80px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 40px;
+      color:antiquewhite
+    }
+    .h1{
+      font-size:40px;
+      margin-bottom:20px;
+      color: rgba(62, 154, 200, 0.596);
+    }
+    
+  </style>
+</head>
+<body>
+  
+
+  <h1 class="h1">Rock Paper Scissors</h1>
+
+  <button class="move-button" onclick="playGame('rock')">👊</button>
+  <button class="move-button" onclick="playGame('paper')">✋</button>
+  <button class="move-button" onclick="playGame('scissors')">✌️</button>
+
+  <div class="result" id="resultText"></div>
+  <div class="score" id="scoreText"></div>
+  <button class="reset-button" onclick="resetScore()">Reset Score</button>
+
+  
+
+
+  <script>
+    let score = JSON.parse(localStorage.getItem('score')) || {
+      wins: 0,
+      losses: 0,
+      ties: 0
+    };
+
+    function updateScoreText() {
+      document.getElementById('scoreText').innerText =
+        `Wins: ${score.wins}, Losses: ${score.losses}, Ties: ${score.ties}`;
+    }
+
+    function playGame(playerMove) {
+      const moves = ['rock', 'paper', 'scissors'];
+      const computerMove = moves[Math.floor(Math.random() * 3)];
+      let result = '';
+
+      if (playerMove === computerMove) {
+        result = 'Tie.';
+        score.ties++;
+      } else if (
+        (playerMove === 'rock' && computerMove === 'scissors') ||
+        (playerMove === 'paper' && computerMove === 'rock') ||
+        (playerMove === 'scissors' && computerMove === 'paper')
+      ) {
+        result = 'You win!';
+        score.wins++;
+      } else {
+        result = 'You lose.';
+        score.losses++;
+      }
+
+      localStorage.setItem('score', JSON.stringify(score));
+      document.getElementById('resultText').innerText =
+        `You ${playerMove}. Computer ${computerMove}. ${result}`;
+      updateScoreText();
+    }
+
+    function resetScore() {
+      score = { wins: 0, losses: 0, ties: 0 };
+      localStorage.removeItem('score');
+      updateScoreText();
+      document.getElementById('resultText').innerText = '';
+    }
+
+    updateScoreText();
+  </script>
+</body>
+</html>
+
